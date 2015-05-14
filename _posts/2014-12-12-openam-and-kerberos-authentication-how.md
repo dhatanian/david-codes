@@ -15,7 +15,7 @@ blogger_orig_url: http://david-codes.blogspot.com/2014/12/openam-and-kerberos-au
 ---
 
 <div style="text-align: justify;">OpenAM is very commonly used with the Kerberos and SPNEGO protocols to provide
-    seamless authentication inside an company's network.
+    seamless authentication inside a company's network.
 </div>
 <div style="text-align: justify;">
 </div>
@@ -36,9 +36,9 @@ blogger_orig_url: http://david-codes.blogspot.com/2014/12/openam-and-kerberos-au
 <div style="text-align: justify;">
 </div>
 <div class="separator" style="clear: both; text-align: center;"><a
-        href="http://2.bp.blogspot.com/-vs-iRQI7rxE/VIqxi6RSoDI/AAAAAAAALW8/Fzu2l9Z4pjI/s1600/2014-12-12_16-12-14.png"
+        href="https://2.bp.blogspot.com/-vs-iRQI7rxE/VIqxi6RSoDI/AAAAAAAALW8/Fzu2l9Z4pjI/s1600/2014-12-12_16-12-14.png"
         imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
-                                                                          src="http://2.bp.blogspot.com/-vs-iRQI7rxE/VIqxi6RSoDI/AAAAAAAALW8/Fzu2l9Z4pjI/s1600/2014-12-12_16-12-14.png"
+                                                                          src="https://2.bp.blogspot.com/-vs-iRQI7rxE/VIqxi6RSoDI/AAAAAAAALW8/Fzu2l9Z4pjI/s1600/2014-12-12_16-12-14.png"
                                                                           height="328" width="640"/></a></div>
 <div style="text-align: justify;">
 </div>
@@ -80,9 +80,9 @@ blogger_orig_url: http://david-codes.blogspot.com/2014/12/openam-and-kerberos-au
 <div>
 </div>
 <a
-        href="http://2.bp.blogspot.com/-RFjVA4gdCV8/VIq1oasc4qI/AAAAAAAALXI/-IIGFxGhQKs/s1600/2014-12-12_16-29-41.png"
+        href="https://2.bp.blogspot.com/-RFjVA4gdCV8/VIq1oasc4qI/AAAAAAAALXI/-IIGFxGhQKs/s1600/2014-12-12_16-29-41.png"
         imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
-                                                                          src="http://2.bp.blogspot.com/-RFjVA4gdCV8/VIq1oasc4qI/AAAAAAAALXI/-IIGFxGhQKs/s1600/2014-12-12_16-29-41.png">
+                                                                          src="https://2.bp.blogspot.com/-RFjVA4gdCV8/VIq1oasc4qI/AAAAAAAALXI/-IIGFxGhQKs/s1600/2014-12-12_16-29-41.png">
 
 Here is the code of a simple custom 401 error page :
 

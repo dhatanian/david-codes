@@ -1,0 +1,48 @@
+---
+layout: post
+title: A bit of fun with the Google Maps API
+date: '2015-01-25T02:13:00.000-08:00'
+author: David Hatanian
+tags:
+modified_time: '2015-01-25T02:13:04.337-08:00'
+thumbnail: http://2.bp.blogspot.com/-5lKqlgXBgC8/VMS2x8L87BI/AAAAAAAALo0/nRhNIZG3xCE/s72-c/2015-01-25_16-24-13.png
+blogger_id: tag:blogger.com,1999:blog-5219665179084602082.post-2414539272530960808
+blogger_orig_url: http://david-codes.blogspot.com/2015/01/a-bit-of-fun-with-google-maps-api.html
+---
+
+<div style="text-align: justify;">A lot of Google Maps use cases require to plot regions, such as sales sectors,
+    maintenance zones or potential customer markets.
+</div><br/>
+<div style="text-align: justify;">Doing this manually is often tedious and error-prone. Since a lot of use cases are
+    based on administrative boundaries (states, cities and others), our best option is to use the administrative
+    boundary as a starting point.
+</div>
+<div style="text-align: justify;"><br/></div>
+<div style="text-align: justify;">For example we have a customer whose sales representatives are deployed on specific
+    zones. Each zone is typically based on a French "département" (an administrative region). It can be a full
+    département, or half a département, or a third...
+</div>
+<div style="text-align: justify;"><br/></div>
+<div style="text-align: justify;">For a bit of fun I wrote <a href="https://gmaps-zone-creator.appspot.com/#/">a quick
+    demo of this approach</a>. The demo application allows you to split a département in two zones. Each zone will be
+    affected to a sales representative.
+</div>
+<div style="text-align: justify;"><br/></div>
+<div class="separator" style="clear: both; text-align: center;"></div>
+<div style="text-align: justify;">
+    <div class="separator" style="clear: both; text-align: center;"><a
+            href="http://2.bp.blogspot.com/-5lKqlgXBgC8/VMS2x8L87BI/AAAAAAAALo0/nRhNIZG3xCE/s1600/2015-01-25_16-24-13.png"
+            imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
+                                                                              src="http://2.bp.blogspot.com/-5lKqlgXBgC8/VMS2x8L87BI/AAAAAAAALo0/nRhNIZG3xCE/s1600/2015-01-25_16-24-13.png"
+                                                                              height="640" width="640"/></a></div>
+    <br/></div>
+<div style="text-align: justify;"><br/></div>
+<div style="text-align: justify;">You can then use Google Maps' geocoding feature to test any address you want and see
+    if it lands on one of the zones you just created.
+</div>
+<div style="text-align: justify;"><br/></div>
+<div style="text-align: justify;">The Github code is available here :&nbsp;<a
+        href="https://github.com/dhatanian/gmaps-zone-creator">https://github.com/dhatanian/gmaps-zone-creator</a></div>
+<div style="text-align: justify;"><br/></div>
+<div style="text-align: justify;">The demo application is available here :&nbsp;<a
+        href="https://gmaps-zone-creator.appspot.com/">https://gmaps-zone-creator.appspot.com</a></div>

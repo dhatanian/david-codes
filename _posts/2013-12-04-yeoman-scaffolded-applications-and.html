@@ -1,0 +1,17 @@
+---
+layout: post
+title: Yeoman-scaffolded applications and i18next
+date: '2013-12-03T18:39:00.003-08:00'
+author: David Hatanian
+tags:
+modified_time: '2013-12-03T18:39:46.729-08:00'
+blogger_id: tag:blogger.com,1999:blog-5219665179084602082.post-2826946272200744162
+blogger_orig_url: http://david-codes.blogspot.com/2013/12/yeoman-scaffolded-applications-and.html
+---
+
+<a href="http://i18next.com/">i18next </a>is a great lib to handle internationalization in javascript. When i first attempted to use it with Yeoman, I had to slightly change the Gruntfile.js to tell it to package the translations in the dist repository.
+<br/><br/>You first add the dependency to your project :<br/><br/>
+<pre class="prettyprint linenums lang-javascript">bower install i18next --save</pre>
+<br/>Then, if you store your translations in the default path (/locales/en/translations.json and so on) then add the following to the Gruntfile.j
+<i>copy:dist</i>&nbsp;definition : <br/><br/>
+<pre class="prettyprint linenums lang-javascript">copy: {<br/>      dist: {<br/>        files: [{<br/>          expand: true,<br/>          dot: true,<br/>          cwd: '&lt;%= yeoman.app %&gt;',<br/>          dest: '&lt;%= yeoman.dist %&gt;',<br/>          src: [<br/>            '*.{ico,png,txt}',<br/>            '.htaccess',<br/>            'bower_components/**/*',<br/>            'images/{,*/}*.{gif,webp}',<br/>            'fonts/*',<br/>            <b>'locales/**/*'</b><br/>          ]<br/>        }<br/></pre>

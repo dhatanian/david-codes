@@ -1,0 +1,103 @@
+---
+layout: post
+title: 'Advanced authentication strategies on OpenAM : choosing the authentication
+strategy based on client''s IP address and the target application'
+date: '2014-06-20T20:37:00.000-07:00'
+author: David Hatanian
+tags:
+- openam
+modified_time: '2014-08-06T01:54:26.524-07:00'
+thumbnail: http://4.bp.blogspot.com/-zo4JYIgjnlM/U6T7Z0JrmCI/AAAAAAAAI4U/1ELeU54cqe0/s72-c/SSO+IP+++SP+auth+switching.png
+blogger_id: tag:blogger.com,1999:blog-5219665179084602082.post-4834083635679777150
+blogger_orig_url: http://david-codes.blogspot.com/2014/06/advanced-autthentication-strategies-on.html
+---
+
+<a href="http://forgerock.com/products/open-identity-stack/openam/">OpenAM</a> is a great open source Single Sign On and federation application, with a lot of features accumulated over its years of existence, first as Sun Access Manager, then as Sun and Oracle OpenSSO, before
+<a href="http://forgerock.com/">Forgerock</a>&nbsp;finally takes over and names it OpenAM.<br/>
+<br/>Finding the exact feature you want, and working around its limitations, can be quite time consuming.<br/>
+<br/>In our case, we wanted to be able to choose the right authentication method (say, Kerberos, Active Directory, several types of strong authentication) based on two factors :
+<br/><br/>
+<ul>
+    <li>IP Address : Is the user coming from the internal network or from the internet ?</li>
+    <li>Targeted Service Provider : Our OpenAM instance is used as SAML2 IDP, and we want to provide different levels of
+        security depending on which SAML2 Service Provider the user is trying to access. In other words, accessing your
+        Google Apps account should require a stronger authentication than a not-so-secret company-wide intrante.
+    </li>
+</ul>
+<div><br/></div>
+<div>Initially, we only managed IP address-based authentication, for which we used policies as is <a
+        href="http://www.oracle.com/technetwork/java/ipresenvauthopensso2-138348.html">described in several blogs</a>.
+    However, we did not find any easy way to extend this feature to switch the authentication based on the Service
+    Provider.
+</div>
+<div><br/></div>
+<div>Here is the solution we eventually implemented :</div>
+<div>
+    <div class="separator" style="clear: both; text-align: center;"><a
+            href="http://4.bp.blogspot.com/-zo4JYIgjnlM/U6T7Z0JrmCI/AAAAAAAAI4U/1ELeU54cqe0/s1600/SSO+IP+++SP+auth+switching.png"
+            imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
+                                                                              src="http://4.bp.blogspot.com/-zo4JYIgjnlM/U6T7Z0JrmCI/AAAAAAAAI4U/1ELeU54cqe0/s1600/SSO+IP+++SP+auth+switching.png"
+                                                                              height="480" width="640"/></a></div>
+    <div class="separator" style="clear: both; text-align: left;"><br/></div>
+    <div class="separator" style="clear: both; text-align: left;">In this architecture, a reverse proxy (we used Apache
+        HTTPd with mod_proxy) redirects the user to one of two realms based on his IP address. Inside each realm, we
+        developped a custom implementation of the IDPAuthnContextMapper class to choose the authentication based on the
+        requested Service Provider.
+    </div>
+    <div class="separator" style="clear: both; text-align: left;"><br/></div>
+</div><h3>IP address-based authentication switching</h3>
+<div>The IDP has two realms "internal" and "external". A reverse proxy is in charge of switching from one realm to the
+    other based on the user's IP address. This way the user only sees one URL, whereas there actually are two :
+</div>
+<div>
+    <ul>
+        <li>The SAML endpoint that the user sees :&nbsp;https://sso.example.com/auth/SSORedirect/metaAlias/idp</li>
+        <li>The actual SAML endpoints that the proxy queries :</li>
+        <ul>
+            <li>https://sso.example.com/SSORedirect/metaAlias/internal/idp</li>
+            <li>https://sso.example.com/SSORedirect/metaAlias/external/idp</li>
+        </ul>
+    </ul>
+    <div>With this, we can configure completely different authentication modules and chainings depending on where the
+        user comes from.
+    </div>
+</div>
+<div><br/></div>
+<div>This requires a bit of configuration overhead, since me must set the IDP's and SP's configuration twice (once for
+    each realm), but it works well overall.
+</div>
+<div><br/></div>
+<div>If you follow OpenAM releases, you may have noticed that there is an <a
+        href="http://openam.forgerock.org/openam-documentation/openam-doc-source/doc/admin-guide/index/chap-auth-services.html#adaptive-auth-module-conf-hints"><i>Adaptative
+    Risk</i>&nbsp;authentication module</a> that can fail or succeed based on a user's IP address. Coupled with
+    authentication chainings, this is another way to perform IP-based authentication switching. However, in our case we
+    wanted to always have Kerberos as the internal authentication method, and with the Adaptative Risk module we could
+    not find a way to avoid showing the Kerberos popup for external users.<br/><br/>
+
+    <div class="separator" style="clear: both; text-align: center;"><a
+            href="http://2.bp.blogspot.com/-qUiy1Eg-2eI/U6T3cHzfuaI/AAAAAAAAI4I/VhIMayBuU5E/s1600/SSO+Kerberos+popup.png"
+            imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
+                                                                              src="http://2.bp.blogspot.com/-qUiy1Eg-2eI/U6T3cHzfuaI/AAAAAAAAI4I/VhIMayBuU5E/s1600/SSO+Kerberos+popup.png"
+                                                                              height="300" width="400"/></a></div>
+    <br/><br/></div>
+<div><h3>Service Provider-based authentication switching</h3></div>
+<div>In OpenAM, there is an interface dedicated to choosing the authentication chaining based on the SAML Request, the
+    <a href="https://svn.forgerock.org/openam/trunk/openam/openam-federation/openam-federation-library/src/main/java/com/sun/identity/saml2/plugins/IDPAuthnContextMapper.java">IDPAuthnContextMapper</a>.
+    The default implentation chooses the authentication chaining or module based on the SAML authentication context
+    provided in the SP's SAML request.
+</div>
+<div><br/></div>
+<div>In our case, we simply reimplemented the interface to decide based on the issuer provided in the SAML request
+    instead of the authentication context.
+</div>
+<div><br/></div>
+<div>We are lucky since OpenAM allows to easily inject your own IPDAuthnContextMapper implementation in replacement of
+    the existing one. Here is what we can see in the IDP configuration screen :
+</div>
+<div><br/></div>
+<div class="separator" style="clear: both; text-align: center;"><a
+        href="http://1.bp.blogspot.com/-7BDH9OJoWCM/U6T954tlZFI/AAAAAAAAI4g/ZMX3THyXthM/s1600/2014-06-21_10-35-49.png"
+        imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
+                                                                          src="http://1.bp.blogspot.com/-7BDH9OJoWCM/U6T954tlZFI/AAAAAAAAI4g/ZMX3THyXthM/s1600/2014-06-21_10-35-49.png"
+                                                                          height="420" width="640"/></a></div>
+<div><br/></div>

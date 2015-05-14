@@ -1,0 +1,482 @@
+---
+layout: post
+title: How to provide seamless Single Sign On on Google Apps
+date: '2014-07-03T04:18:00.001-07:00'
+author: David Hatanian
+tags:
+modified_time: '2015-04-21T03:11:41.594-07:00'
+thumbnail: http://3.bp.blogspot.com/-EMJ9__j_CSE/U7U64SD-bOI/AAAAAAAAI8c/Mx7wdqOrobI/s72-c/marketplace.png
+blogger_id: tag:blogger.com,1999:blog-5219665179084602082.post-2973612774287187785
+blogger_orig_url: http://david-codes.blogspot.com/2014/07/how-to-provide-seamless-single-sign-on.html
+---
+
+<h1 dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 10pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Trebuchet MS'; font-size: 21px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Context</span>
+</h1>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Before OAuth, in order to authenticate a user an application would redirect him to the </span><a
+        href="https://developers.google.com/accounts/docs/OpenID" style="text-decoration: none;"><span
+        style="background-color: transparent; color: #1155cc; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: underline; vertical-align: baseline; white-space: pre-wrap;">OpenID</span></a><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> login page.</span>
+</div><b id="docs-internal-guid-4d9bc530-fbeb-b258-e8d0-0a859f204f0d" style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">It was possible to avoid the consent window by registering your the application through the </span><a
+        href="https://developers.google.com/google-apps/extensions-console/?csw=1" style="text-decoration: none;"><span
+        style="background-color: transparent; color: #1155cc; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: underline; vertical-align: baseline; white-space: pre-wrap;">Google Apps Console</span></a><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">.</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">However, </span><a
+        href="https://developers.google.com/+/api/auth-migration#timetable" style="text-decoration: none;"><span
+        style="background-color: transparent; color: #1155cc; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: underline; vertical-align: baseline; white-space: pre-wrap;">OpenID is going to be deprecated</span></a><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> and replaced by OAuth2. This document details how to achieve seamless Single Sign On (no consent window) with OAuth2 through the GApps Marketplace.</span>
+</div><h1 dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 10pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Trebuchet MS'; font-size: 21px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">OAuth authentication flow</span>
+</h1><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">1. Redirect the user to the following URL : </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;https://accounts.google.com/o/oauth2/auth &nbsp;&nbsp;?client_id=815629710953-nd6a8ofur4prtau84mt67r9h25hvkd4d.apps.googleusercontent.com</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;response_type=code</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;scope=email+profile</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;redirect_uri=https://localhost:8080</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;state=12345678</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">This is standard OAuth behavior, here are the different parts :</span>
+</div>
+<ul style="margin-bottom: 0pt; margin-top: 0pt;">
+    <li dir="ltr"
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: disc; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">client_id : a client_id generated in the API Console</span>
+        </div>
+    </li>
+    <li dir="ltr"
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: disc; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">response_type : always keep "code"</span>
+        </div>
+    </li>
+    <li dir="ltr"
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: disc; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">scope : keep "email+profile", otherwise the seamless SSO does not work</span>
+        </div>
+    </li>
+    <li dir="ltr"
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: disc; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">redirect_uri : URL of your application</span>
+        </div>
+    </li>
+    <li dir="ltr"
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: disc; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">state : a random string generated by your app to ensure that nobody is stealing the account info</span>
+        </div>
+    </li>
+</ul><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">2. Google will bypass the consent window and send the user to the redirect_uri, passing in parameters the same state and the code. In our example :</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;</span><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">https://localhost:8080/?state=12345678&amp;code=4/PE4pFdMWdSU89L5BxCfQYl7rrCe4.sg3ll1ncyWAadJfo-QBMszv26aO4jQI</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">3. Check that the state is valid, typically by checking with a value generated from the user's session. Exchange the code against a refresh and access token. This is standard OAuth behavior, executed server side, here is the request :</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">HTTP POST to https://accounts.google.com/o/oauth2/token HTTP/1.1</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">code=4%2FNa7-XZQEVy4rSpoWHI0g-eanF2pW.os7UPIcmZBUWdJfo-QBMszs6qtm4jQI&amp;redirect_uri=https%3A%2F%2Flocalhost:8080&amp;client_id=815629710953-nd6a8ofur4prtau84mt67r9h25hvkd4d.apps.googleusercontent.com&amp;scope=&amp;client_secret=YOURCLIENTSECRET&amp;grant_type=authorization_code</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">4. Here's a typical answer from Google :</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">{</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;"access_token": "ya29.MQ...UlmQ7g", </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;"token_type": "Bearer", </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;"expires_in": 3600, </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;"refresh_token": "1/V09...4C8", </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;"id_token": "eyJhbGciOi...WlOvPsnHeBEuChaeCziau_MggFWoBCuozy0ZoBdXXc"</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">}</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">From this answer, the best option is to JWT-decode the "id_token". You can use this online tool for testing. Here's the result : </span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">{</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"sub": "109177816070718727151", </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"cid": "407408718192.apps.googleusercontent.com", </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"iss": "accounts.google.com", </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"email_verified": true, </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"id": "109177816070718727151", </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"at_hash": "rAxrTmUjD7rk-5H2EJFnZw", </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"exp": 1403860943, </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"azp": "407408718192.apps.googleusercontent.com", </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"iat": 1403857043, </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"verified_email": true, </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"token_hash": "rAxrTmUjD7rk-5H2EJFnZw", </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"email": "david.hatanian@revevol.eu", </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"hd": "revevol.eu", </span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"aud": "407408718192.apps.googleusercontent.com"</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">}</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt; text-align: justify;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">There you go ! you have the email of the user, and in "id" this is a unique id internal to Google, that will never change even if the email changes. It's also the G+ id for G+ users. Now you can store that in the user's session.</span>
+</div><b style="font-weight: normal;"><br/></b><br/><h1 dir="ltr"
+                                                        style="line-height: 1.15; margin-bottom: 0pt; margin-top: 10pt;">
+    <span style="background-color: transparent; color: black; font-family: 'Trebuchet MS'; font-size: 21px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Configuration steps</span>
+</h1>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Here are all the required setup steps to perform the authentication process described above :</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<ol style="margin-bottom: 0pt; margin-top: 0pt;">
+    <li dir="ltr"
+        style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: decimal; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Create an API project through the API Console</span>
+        </div>
+    </li>
+    <li dir="ltr"
+        style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: decimal; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Enable the G+ API and the Marketplace SDK</span>
+        </div>
+    </li>
+</ol><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;">
+    <div class="separator" style="clear: both; text-align: center;"><a
+            href="http://3.bp.blogspot.com/-EMJ9__j_CSE/U7U64SD-bOI/AAAAAAAAI8c/Mx7wdqOrobI/s1600/marketplace.png"
+            imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
+                                                                              src="http://3.bp.blogspot.com/-EMJ9__j_CSE/U7U64SD-bOI/AAAAAAAAI8c/Mx7wdqOrobI/s1600/marketplace.png"
+                                                                              height="339" width="640"/></a></div>
+    <span id="goog_1608642334"></span><span id="goog_1608642335"></span><br/></div><b style="font-weight: normal;"><br/></b>
+<br/>
+<ol start="3" style="margin-bottom: 0pt; margin-top: 0pt;">
+    <li dir="ltr"
+        style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: decimal; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Generate an OAuth2 webapp credential. Put your application URL as a registered redirect URI.</span>
+        </div>
+    </li>
+</ol><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;">
+    <div class="separator" style="clear: both; text-align: center;"><a
+            href="http://1.bp.blogspot.com/-bX4YmHV6Mbk/U7U7DJ_vrFI/AAAAAAAAI8k/2_AixhhcO8s/s1600/cred.png"
+            imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
+                                                                              src="http://1.bp.blogspot.com/-bX4YmHV6Mbk/U7U7DJ_vrFI/AAAAAAAAI8k/2_AixhhcO8s/s1600/cred.png"
+                                                                              height="220" width="640"/></a></div>
+    <br/></div><b style="font-weight: normal;"><br/></b><br/>
+<ol start="4" style="margin-bottom: 0pt; margin-top: 0pt;">
+    <li dir="ltr"
+        style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: decimal; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Setup the marketplace SDK. (click on the cog wheel next to the Marketplace SDK name) You must provide icons and basic info on your app. You will need to choose either "Universal Navigation Link" or "Drive App". See below for the pros and cons, but we recommend "Universal Navigation Link".</span><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"><br
+                class="kix-line-break"/></span></div>
+    </li>
+</ol>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;">
+    <div class="separator" style="clear: both; text-align: center;"><a
+            href="http://1.bp.blogspot.com/-L6zI4AZC-I4/U7U7JmGFajI/AAAAAAAAI8s/jAS6Qeb5Qy0/s1600/sdkconfig.png"
+            imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
+                                                                              src="http://1.bp.blogspot.com/-L6zI4AZC-I4/U7U7JmGFajI/AAAAAAAAI8s/jAS6Qeb5Qy0/s1600/sdkconfig.png"
+                                                                              height="340" width="640"/></a></div>
+    <br/></div>
+<div class="separator" style="clear: both; text-align: center;"><a
+        href="http://4.bp.blogspot.com/-ozl-dEJAWTQ/VBhevX7W9kI/AAAAAAAAJpY/vqHPIqXZB5M/s1600/2014-09-16_22-59-28.png"
+        imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
+                                                                          src="http://4.bp.blogspot.com/-ozl-dEJAWTQ/VBhevX7W9kI/AAAAAAAAJpY/vqHPIqXZB5M/s1600/2014-09-16_22-59-28.png"/></a>
+</div><b style="font-weight: normal;"><br/></b><br/><b style="font-weight: normal;"><br/></b><br/>
+<ol start="5" style="margin-bottom: 0pt; margin-top: 0pt;">
+    <li dir="ltr"
+        style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: decimal; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Go to the </span><a
+                href="https://chrome.google.com/webstore/developer/dashboard" style="text-decoration: none;"><span
+                style="background-color: transparent; color: #1155cc; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: underline; vertical-align: baseline; white-space: pre-wrap;">Chrome Webstore web developer dashboard</span></a><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">, and upload a zip file composed of :</span>
+        </div>
+    </li>
+    <ol style="margin-bottom: 0pt; margin-top: 0pt;">
+        <li dir="ltr"
+            style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: decimal; text-decoration: none; vertical-align: baseline;">
+            <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                    style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">A manifest.json</span>
+            </div>
+        </li>
+        <li dir="ltr"
+            style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: decimal; text-decoration: none; vertical-align: baseline;">
+            <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                    style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">16px and 128px icons for your app</span>
+            </div>
+        </li>
+    </ol>
+</ol><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Here's an example of manifest.json :</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">{</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"name": "Revevol SSO to </span><span
+        style="background-color: #ffffcc; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">marketplace</span><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">",</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"version": "0.1",</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"><span
+        class="Apple-tab-span" style="white-space: pre;"> </span></span><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">"manifest_version": 2,</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"description": "Demonstration of the seamless SSO with the </span><span
+        style="background-color: #ffffcc; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">marketplace</span><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> SDK",</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"icons": {</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"><span
+        class="Apple-tab-span" style="white-space: pre;"> </span></span><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"128": "images/pdf-icon-128x128.png",</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"16": "images/Pdf_16x16_Crystal_SVG.png"</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;},</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"container": ["DOMAIN_INSTALLABLE"],</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> &nbsp;&nbsp;&nbsp;"api_console_project_id": "815629710953",</span><br/><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">    "app": {     "launch": {       "web_url": "https://yourapplication.com"     }   }</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: 'Courier New'; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">}</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<ol start="6" style="margin-bottom: 0pt; margin-top: 0pt;">
+    <li dir="ltr"
+        style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: decimal; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Limit the access to the marketplace application to a defined list of trusted testers. Publish it. Here is what you can see in the Chrome Webstore developer dashboard after publication :</span>
+        </div>
+    </li>
+</ol>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;">
+    <div class="separator" style="clear: both; text-align: center;"><a
+            href="http://3.bp.blogspot.com/-iFgeA8ybRK4/U7U7YuSb6TI/AAAAAAAAI80/FMTKlOZMGY4/s1600/webstorelisting.png"
+            imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
+                                                                              src="http://3.bp.blogspot.com/-iFgeA8ybRK4/U7U7YuSb6TI/AAAAAAAAI80/FMTKlOZMGY4/s1600/webstorelisting.png"
+                                                                              height="228" width="640"/></a></div>
+    <br/></div><b style="font-weight: normal;"><br/></b><br/>
+<ol start="7" style="margin-bottom: 0pt; margin-top: 0pt;">
+    <li dir="ltr"
+        style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: decimal; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">After publication (can take up to 60 minutes), </span><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">as a domain admin</span><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">, install the app from the Chrome Webstore onto the domain by going on the application’s URL in the Chrome Web Store. To do this, click on the “</span><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Integrate with Google</span><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">” button.</span>
+        </div>
+    </li>
+</ol>
+<div class="separator" style="clear: both; text-align: center;"><a
+        href="http://1.bp.blogspot.com/-RHp1FrfiWS4/U7U7jButUTI/AAAAAAAAI88/1Ehm_aelIvY/s1600/websoreresult.png"
+        imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
+                                                                          src="http://1.bp.blogspot.com/-RHp1FrfiWS4/U7U7jButUTI/AAAAAAAAI88/1Ehm_aelIvY/s1600/websoreresult.png"
+                                                                          height="224" width="640"/></a></div><b
+        style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;">
+    <div class="separator" style="clear: both; text-align: center;"></div>
+    <br/></div><b style="font-weight: normal;"><br/></b><br/><h1 dir="ltr"
+                                                                 style="line-height: 1.15; margin-bottom: 0pt; margin-top: 10pt;">
+    <span style="background-color: transparent; color: black; font-family: 'Trebuchet MS'; font-size: 21px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Limitations</span>
+</h1>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">There are two important limitations with this process :</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Iframes : </span><span
+        style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">You cannot redirect to the OAuth screen in an iframe (like in a sites gadget). In this case you will have to display a button to the users, on which they will have to click. The button will open an authentication popup, the user will be seamlessly authenticated. Then your javascript code must automatically close the popup and refresh the iframe.</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">More apps menu</span><span
+        style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> : When setting up the </span><span
+        style="background-color: #ffffcc; color: #222222; font-family: Arial; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">marketplace</span><span
+        style="background-color: white; color: #222222; font-family: Arial; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> SDK, you have the choice between "Navigation link" and "Drive App". If you choose "Navigation Link" the app will show in the "More" menu on the top right. If you choose the "Drive App" then the app will show in the "Manage Apps" menu of Drive. We haven't found a way yet to remove all mentions of the app, and have reported a feature request to Google for this.</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt; text-align: center;">
+    <div class="separator" style="clear: both; text-align: center;"><a
+            href="http://2.bp.blogspot.com/-y7KxvHshdn0/U7U7pdITPII/AAAAAAAAI9E/unh1DUKBuiM/s1600/more.png"
+            imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
+                                                                              src="http://2.bp.blogspot.com/-y7KxvHshdn0/U7U7pdITPII/AAAAAAAAI9E/unh1DUKBuiM/s1600/more.png"
+                                                                              height="320" width="235"/></a></div>
+    <br/></div><b style="font-weight: normal;"><br/></b><br/><h1 dir="ltr"
+                                                                 style="line-height: 1.15; margin-bottom: 0pt; margin-top: 10pt;">
+    <span style="background-color: transparent; color: black; font-family: 'Trebuchet MS'; font-size: 21px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Example project</span>
+</h1><h2 dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 10pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Trebuchet MS'; font-size: 17px; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Testing</span>
+</h2>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">An example project is available </span><span
+        style="font-family: Arial; font-size: 15px; line-height: 1.15; vertical-align: baseline; white-space: pre-wrap;">on Github here : </span><span
+        style="color: #1155cc; font-family: Arial; font-size: 15px; line-height: 1.15; text-decoration: underline; vertical-align: baseline; white-space: pre-wrap;"><a
+        href="https://github.com/dhatanian/demo-marketplace-sso"
+        style="font-family: Arial; font-size: 15px; line-height: 1.15; text-decoration: none;">https://github.com/dhatanian/demo-marketplace-sso</a></span><br/><br/>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">This project contains the source code for a very simple Java App Engine web application that displays the email of the user :</span>
+</div>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><br/>
+
+    <div class="separator" style="clear: both; text-align: center;"><a
+            href="http://3.bp.blogspot.com/-VcIaZRFAJek/U7U7vKF7yvI/AAAAAAAAI9M/tlnhLO_tF5g/s1600/demo.png"
+            imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
+                                                                              src="http://3.bp.blogspot.com/-VcIaZRFAJek/U7U7vKF7yvI/AAAAAAAAI9M/tlnhLO_tF5g/s1600/demo.png"
+                                                                              height="160" width="640"/></a></div>
+    <br/></div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">It is deployed on App Engine on this URL : </span><a
+        href="https://revevol-marketplace-sso-demo.appspot.com/secured" style="text-decoration: none;"><span
+        style="background-color: transparent; color: #1155cc; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: underline; vertical-align: baseline; white-space: pre-wrap;">https://revevol-marketplace-sso-demo.appspot.com/secured</span></a>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">To experience seamless SSO, remember to install the app on your domain through the Chrome Web Store before accessing the URL above. Here’s the app’s URL in the Chrome Web Store : </span><a
+        href="https://chrome.google.com/webstore/detail/demo-of-sso-to-marketplac/fajllpdcdhkpkhnhknjnkfignojcbojd"
+        style="text-decoration: none;"><span
+        style="background-color: transparent; color: #1155cc; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: underline; vertical-align: baseline; white-space: pre-wrap;">https://chrome.google.com/webstore/detail/demo-of-sso-to-marketplac/fajllpdcdhkpkhnhknjnkfignojcbojd</span></a>
+</div><h2 dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 10pt;"><span
+        style="background-color: transparent; color: black; font-family: 'Trebuchet MS'; font-size: 17px; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">To compile the sample project</span>
+</h2>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">To compile and deploy this project, you will need Maven. Maven is the build tool in charge of retrieving all the required libraries and compiling the project for us.</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><a
+        href="http://maven.apache.org/download.html" style="text-decoration: none;"><span
+        style="background-color: transparent; color: #1155cc; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: underline; vertical-align: baseline; white-space: pre-wrap;">You can download Maven here</span></a><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">, then follow those </span><a
+        href="http://maven.apache.org/download.cgi#Installation" style="text-decoration: none;"><span
+        style="background-color: transparent; color: #1155cc; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: underline; vertical-align: baseline; white-space: pre-wrap;">instructions to complete the installation</span></a><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">.</span>
+</div><b style="font-weight: normal;"><br/></b><br/>
+<div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">After the installation of Maven, you can run the following commands :</span>
+</div><br/>
+<ul style="margin-bottom: 0pt; margin-top: 0pt;">
+    <li dir="ltr"
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: disc; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">To deploy the project on a server local to your workstation : </span><span
+                style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">mvn appengine:devserver</span>
+        </div>
+    </li>
+    <li dir="ltr"
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: disc; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">To deploy the project on App Engine : </span><span
+                style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">mvn appengine:update</span><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> .</span>
+        </div>
+    </li>
+    <ul style="margin-bottom: 0pt; margin-top: 0pt;">
+        <li dir="ltr"
+            style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: circle; text-decoration: none; vertical-align: baseline;">
+            <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                    style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">This will update the default revevol-marketplace-sso-demo application.</span>
+            </div>
+        </li>
+        <li dir="ltr"
+            style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: circle; text-decoration: none; vertical-align: baseline;">
+            <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                    style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">But you can specify a different one like this : </span><span
+                    style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">mvn appengine:update -Dappengine.appId=myappid</span>
+            </div>
+        </li>
+    </ul>
+    <li dir="ltr"
+        style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: disc; text-decoration: none; vertical-align: baseline;">
+        <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">To generate an Eclipse project : </span><span
+                style="background-color: transparent; color: black; font-family: 'Courier New'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">mvn eclipse:eclipse</span><span
+                style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"> .</span>
+        </div>
+    </li>
+    <ul style="margin-bottom: 0pt; margin-top: 0pt;">
+        <li dir="ltr"
+            style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: circle; text-decoration: none; vertical-align: baseline;">
+            <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                    style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Maven will generate the required Eclipse project files</span>
+            </div>
+        </li>
+        <li dir="ltr"
+            style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: circle; text-decoration: none; vertical-align: baseline;">
+            <div dir="ltr" style="line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;"><span
+                    style="background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">After this, you can use the “File &gt; Import” feature of Eclipse to import your project</span>
+            </div>
+        </li>
+    </ul>
+</ul>

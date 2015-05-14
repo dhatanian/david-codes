@@ -1,0 +1,22 @@
+---
+layout: post
+title: Objectify and strange errors with GWT serializations
+date: '2013-04-04T09:15:00.003-07:00'
+author: David Hatanian
+tags:
+modified_time: '2013-04-04T09:15:34.396-07:00'
+blogger_id: tag:blogger.com,1999:blog-5219665179084602082.post-7455732729975892877
+blogger_orig_url: http://david-codes.blogspot.com/2013/04/objectify-and-strange-errors-with-gwt.html
+---
+
+<div style="text-align: justify;">OK, so it turns out Objectify returns non-serializable lists when using the
+    <i>list()</i>&nbsp;method. Using the following method :
+</div>
+<div style="text-align: justify;"><br/></div>
+<div style="text-align: justify;"><br/></div><br/>
+<pre style="background-color: white; font-size: 12px; max-width: 80em; padding-left: 0.7em; text-align: start; white-space: pre-wrap;">ofy.load().type(Plant.class).list();<br/></pre>
+<pre style="background-color: white; font-size: 12px; max-width: 80em; padding-left: 0.7em; text-align: start; white-space: pre-wrap;"><br/></pre>
+<pre style="background-color: white; font-size: 12px; max-width: 80em; padding-left: 0.7em; text-align: start; white-space: pre-wrap;"><br/></pre>And directly returning the value to GWT client side throws a cryptic serialization exception, where the class that raises the problem is called
+<i>Proxy$XX </i>where XX are digits.<br/>
+<br/>That problem is going to be fixed in GWT next version, but meanwhile we have to use the workaround provided in the
+<a href="https://code.google.com/p/objectify-appengine/issues/detail?id=120">bug report</a>.

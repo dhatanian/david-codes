@@ -1,0 +1,122 @@
+---
+layout: post
+title: 'Google APIs : checking the scopes contained in an OAuth2 access token'
+date: '2014-07-22T03:50:00.000-07:00'
+author: David Hatanian
+tags:
+modified_time: '2014-10-02T21:21:09.871-07:00'
+blogger_id: tag:blogger.com,1999:blog-5219665179084602082.post-5787511335170903641
+blogger_orig_url: http://david-codes.blogspot.com/2014/07/google-apis-checking-scopes-contained.html
+---
+
+When you've stored an OAuth2 access/refresh token couple for a long time, you might not be sure what scopes it was giving access to.
+<br/><br/>In that case, just pass the access token to the <i>tokeninfo</i>&nbsp;endpoint :<br/><br/>
+<pre class="prettyprint">https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=XXXXX<br/></pre>
+<br/>The output looks like this :<br/><br/>
+<pre class="default prettyprint prettyprinted"
+     style="background: rgb(238, 238, 238); border: 0px; font-family: Consolas, Menlo, Monaco, 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace, serif; font-size: 14px; line-height: 17.8048000335693px; margin-bottom: 10px; max-height: 600px; overflow: auto; padding: 5px; vertical-align: baseline; width: auto; word-wrap: normal;"><code
+        style="background-attachment: initial; background-clip: initial; background-image: initial; background-origin: initial; background-position: initial; background-repeat: initial; background-size: initial; border: 0px; font-family: Consolas, Menlo, Monaco, 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace, serif; margin: 0px; padding: 0px; vertical-align: baseline; white-space: inherit;"><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">{</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"><br/> </span><span
+        class="str"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">"issued_to"</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">:</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"> </span><span
+        class="str"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">"407408718192.apps.googleusercontent.com"</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">,</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"><br/> </span><span
+        class="str"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">"audience"</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">:</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"> </span><span
+        class="str"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">"407408718192.apps.googleusercontent.com"</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">,</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"><br/> </span><span
+        class="str"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">"user_id"</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">:</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"> </span><span
+        class="str"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">"1170123456778279183758"</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">,</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"><br/> </span><span
+        class="str"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">"scope"</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">:</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"> </span><span
+        class="str"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">"https://www.googleapis.com/auth/userinfo.email"</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">,</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"><br/> </span><span
+        class="str"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">"expires_in"</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">:</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"> </span><span
+        class="lit"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">3585</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">,</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"><br/> </span><span
+        class="str"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">"email"</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">:</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"> </span><span
+        class="str"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">"someone@yourdomain.com"</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">,</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"><br/> </span><span
+        class="str"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">"verified_email"</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">:</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"> </span><span
+        class="kwd"
+        style="background: transparent; border: 0px; color: darkblue; margin: 0px; padding: 0px; vertical-align: baseline;">true</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">,</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"><br/> </span><span
+        class="str"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">"access_type"</span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">:</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"> </span><span
+        class="str"
+        style="background: transparent; border: 0px; color: maroon; margin: 0px; padding: 0px; vertical-align: baseline;">"offline"</span><span
+        class="pln"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;"><br/></span><span
+        class="pun"
+        style="background: transparent; border: 0px; margin: 0px; padding: 0px; vertical-align: baseline;">}</span></code></pre>
+<br/>Of course you can also do this with a library. In Java :<br/><br/>
+<pre class="prettyprint">Oauth2 oauth2 = new Oauth2.Builder(new NetHttpTransport(), new JacksonFactory(), null)<br/>                  .setApplicationName(ProbeClient.APPLICATION_NAME)<br/>                  .build();<br/>return oauth2.tokeninfo().setAccessToken(yourAccessToken).execute();<br/></pre>
+<br/>You'll need the following dependency :<br/><br/>
+<pre class="prettyprint">&lt;dependency&gt;<br/>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;groupId&gt;com.google.apis&lt;/groupId&gt;<br/>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;artifactId&gt;google-api-services-oauth2&lt;/artifactId&gt;<br/>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;version&gt;v1-rev76-1.18.0-rc&lt;/version&gt;<br/>&lt;/dependency&gt;<br/></pre>

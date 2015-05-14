@@ -1,0 +1,24 @@
+---
+layout: post
+title: Yeoman and images handling issues (on Windows 7 64b at least)
+date: '2013-12-03T09:18:00.000-08:00'
+author: David Hatanian
+tags:
+modified_time: '2013-12-03T09:18:09.964-08:00'
+blogger_id: tag:blogger.com,1999:blog-5219665179084602082.post-8064727921425952916
+blogger_orig_url: http://david-codes.blogspot.com/2013/12/yeoman-and-images-handling-issues-on.html
+---
+
+I'm trying out <a href="https://github.com/yeoman/yeoman">Yeoman</a> these days, along with <a
+        href="http://angularjs.org/">AngularJS</a>, <a href="http://getbootstrap.com/">Bootstrap </a>and the <a
+        href="https://github.com/trecloux/yeoman-maven-plugin">Yeoman Maven
+    plugin</a> to integrate everything in a tool I already know :-)<br/>
+<br/>The bootstrapping phase works great, even on Windows assuming that you already have a batch like cygwin installed. However I started facing some issues as soon as I added some images in the project.
+<br/><br/>After adding some images, I got the following error during <i>grunt build&nbsp;</i>:<br/><br/><i>&nbsp; &nbsp;Warning:</i>
+<br/><i>&nbsp; &nbsp;
+    g:\dev\proj\intranet-homepage\yo\node_modules\grunt-contrib-compass\node_modules\tmp\lib\tmp.js:261</i><br/><i>
+    &nbsp; &nbsp; &nbsp; throw err;</i><br/><i>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ^</i><br/><i>&nbsp; &nbsp;
+    Error: spawn ENOENT</i><br/><i>&nbsp; &nbsp; &nbsp; &nbsp; at errnoException (child_process.js:980:11)</i><br/><i>
+    &nbsp; &nbsp; &nbsp; &nbsp; at Process.ChildProcess._handle.onexit (child_process.js:771:34) Use --force to
+    continue.</i><br/><i><br/></i><br/>As it turns out, <b>Grunt does not like jpg
+    files.</b>&nbsp;That is, the imagemin module does not. So, converting those jpg files to png did the trick.

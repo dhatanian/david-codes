@@ -1,0 +1,19 @@
+---
+layout: post
+title: 'Maven : add a custom repository in your source code'
+date: '2014-03-11T02:50:00.001-07:00'
+author: David Hatanian
+tags:
+modified_time: '2014-03-11T03:01:24.914-07:00'
+blogger_id: tag:blogger.com,1999:blog-5219665179084602082.post-4059902320727113959
+blogger_orig_url: http://david-codes.blogspot.com/2014/03/maven-add-custom-repository-in-your.html
+---
+
+Yes, yes, you should not do that. It is better to use a custom Maven repository such as Nexus or Archiva.<br/>
+<br/>However, sometimes there's this library that you want to use in a one-shot project, that you cannot deploy in a custom repository for any reason.
+<br/><br/>In that case, you can create a custom maven repository in your source code and add the item that way :<br/>
+<br/>
+<pre class="prettyprint linenums">mvn org.apache.maven.plugins:maven-install-plugin:2.5.1:install-file \<br/>    -Dfile=path-to-your-artifact-jar \<br/>    -DgroupId=your.groupId \<br/>    -DartifactId=your-artifactId \<br/>    -Dversion=version \<br/>    -Dpackaging=jar \<br/>    -DlocalRepositoryPath=path-to-specific-local-repo<br/></pre>
+<br/>source : <a href="http://maven.apache.org/plugins/maven-install-plugin/examples/specific-local-repo.html">Maven
+    Install Plugin documentation</a><br/><br/>In the pom.xml, add the following repository configuration :<br/><br/>
+<pre class="prettyprint linenums">&lt;repository&gt;<br/> &lt;id&gt;localRepo&lt;/id&gt;<br/> &lt;url&gt;file:${basedir}/repository&lt;/url&gt;<br/>&lt;/repository&gt;<br/></pre>

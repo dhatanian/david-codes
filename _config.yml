@@ -1,0 +1,12 @@
+# Site settings
+title: David Codes
+email: david@hatanian.com
+description: > # this means to ignore newlines until "baseurl:"
+  My thoughts and rants on development and IT subjects
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "https://david-codes.hatanian.com" # the base hostname & protocol for your site
+twitter_username: DHatanian
+github_username:  dhatanian
+
+# Build settings
+markdown: kramdown

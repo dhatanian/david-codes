@@ -1,0 +1,27 @@
+---
+layout: post
+title: Maven, App Engine and Yeoman
+date: '2014-05-06T21:11:00.001-07:00'
+author: David Hatanian
+tags:
+modified_time: '2014-05-06T21:12:23.598-07:00'
+blogger_id: tag:blogger.com,1999:blog-5219665179084602082.post-8526258696459904295
+blogger_orig_url: http://david-codes.blogspot.com/2014/05/maven-app-engine-and-angularjs.html
+---
+
+Over the last two years, Javascript's ecosystem of build/scaffodling/dependency management tools has really improved. These days it is quite easy to bootstrap and manage your app using
+<a href="http://yeoman.io/">Yeoman</a>, for example.<br/>
+<br/>Now I do use Javascript as the frontend language, but most of the time my backend is written in Java on Google App Engine, and uses good old
+<a href="http://maven.apache.org/">Maven</a> as the build and dependency management tool.<br/>
+<br/>Luckily, there is a way to integrate Yeoman into the Maven package, you just have to use the <a
+        href="https://github.com/trecloux/yeoman-maven-plugin">yeoman-maven-plugin</a> by Thomas Recloux. Here is how to integrate it in your pom.xml :
+<br/><br/>
+<pre class="prettyprint linenums">&lt;build&gt;<br/>        &lt;plugins&gt;<br/>            &lt;plugin&gt;<br/>                &lt;groupid&gt;com.github.trecloux&lt;/groupid&gt;<br/>                &lt;artifactid&gt;yeoman-maven-plugin&lt;/artifactid&gt;<br/>                &lt;version&gt;0.2&lt;/version&gt;<br/>                &lt;executions&gt;<br/>                    &lt;execution&gt;<br/>                        &lt;goals&gt;<br/>                            &lt;goal&gt;build&lt;/goal&gt;<br/>                        &lt;/goals&gt;<br/>                    &lt;/execution&gt;<br/>                &lt;/executions&gt;<br/>            &lt;/plugin&gt;<br/>        &lt;/plugins&gt;<br/>&lt;/build&gt;<br/></pre>
+<br/>The next issue is, during development tasks, how do you wire your local development server (for example the App Engine local server or a Jetty instance) so that the "grunt server" command can leverage it ?
+<br/>
+<br/>You can do this with the "proxy" feature in Grunt, you will find below what I added to my Gruntfile.js to make it work.
+<a href="https://github.com/dhatanian/gae-gce-tasks-orchestrator/blob/master/yo/Gruntfile.js">You can also find the full
+    example on Github</a>. <br/>
+<br/>The biggest issue I still have with this workflow is that I cannot keep the "grunt server" task running when I package my war, for example to upload on App Engine. Otherwise the Maven execution fails.
+<br/><br/>
+<pre class="prettyprint linenums">connect: {<br/>            options: {<br/>                port: 9000,<br/>                // Change this to '0.0.0.0' to access the server from outside.<br/>                hostname: 'localhost',<br/>                livereload: 35729<br/>            }, proxies: [<br/>                {<br/>                    context: [<br/>                        '/_ah',<br/>                        '/admin'<br/>                    ],<br/>                    host: 'localhost',<br/>                    port: 8080,<br/>                    https: false,<br/>                    changeOrigin: false,<br/>                    xforward: false<br/>                }<br/>            ], livereload: {<br/>                options: {<br/>                    open: true,<br/>                    base: [<br/>                        '.tmp',<br/>                        '&lt;%= yeoman.app %&gt;'<br/>                    ],<br/>                    middleware: function (connect, options) {<br/>                        if (!Array.isArray(options.base)) {<br/>                            options.base = [options.base];<br/>                        }<br/><br/>                        // Setup the proxy<br/>                        var middlewares = [require('grunt-connect-proxy/lib/utils').proxyRequest];<br/><br/>                        // Serve static files.<br/>                        options.base.forEach(function (base) {<br/>                            middlewares.push(connect.static(base));<br/>                        });<br/><br/>                        // Make directory browse-able.<br/>                        var directory = options.directory || options.base[options.base.length - 1];<br/>                        middlewares.push(connect.directory(directory));<br/><br/>                        return middlewares;<br/>                    }<br/>                }<br/>            },<br/>...<br/>grunt.loadNpmTasks('grunt-connect-proxy');<br/>...<br/>grunt.registerTask('server', function (target) {<br/>        if (target === 'dist') {<br/>            return grunt.task.run(['build', 'connect:dist:keepalive']);<br/>        }<br/><br/>        grunt.task.run([<br/>            'clean:server',<br/>            'concurrent:server',<br/>            'autoprefixer',<br/>            'configureProxies:server',<br/>            'connect:livereload',<br/>            'watch'<br/>        ]);<br/>    });<br/></pre>

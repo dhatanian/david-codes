@@ -10,3 +10,5 @@ github_username:  dhatanian
 
 # Build settings
 markdown: kramdown
+gems:
+  - jekyll-sitemap

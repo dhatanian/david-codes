@@ -4,13 +4,19 @@ title: About me
 permalink: /about/
 ---
 
+<div style="float:left; margin-right:35px; max-width:502px; position:relative" markdown="1">
+
 I am a software engineer, working mainly on Java / AnjularJS applications at the moment. I also have a strong interest for Scala development.
 
-I am French but work remotely from various places. So far it included India, Vietnam, Morocco, Malaysia, Switzerland and Senegal. Remote does work and I'll be ahappy to share my experience and tips on remote work if needed.
+I am French but work remotely from various places. So far it included India, Vietnam, Morocco, Malaysia, Switzerland and Senegal. Remote does work and I'll be happy to share my experience and tips on remote work.
+
+</div>
+
+<div style="float:left; position:relative" markdown="1">
+![My picture](/portrait-small.jpg){:height="200px"}
+</div>
 
 To contact me or know more :
-
-<div style="float:left; margin-right:35px" markdown="1">
 
 <a href='https://vn.linkedin.com/pub/david-hatanian/13/16/3b6' target='_blank' >
 ![LinkedIn logo](/icons/linkedin.png){:height="30px"} LinkedIn</a>
@@ -30,9 +36,3 @@ To contact me or know more :
 <sub><sup>
 Icons by <a href='http://goodstuffnononsense.com'>goodstuffnononsense.com</a></sup>
 </sub>
-
-</div>
-
-<div style="float:left" markdown="1">
-![My picture](/portrait-small.jpg){:height="200px"}
-</div>

@@ -38,8 +38,8 @@ blogger_orig_url: http://david-codes.blogspot.com/2014/12/openam-and-kerberos-au
 <div class="separator" style="clear: both; text-align: center;"><a
         href="/assets/{{ page.path | replace:'_posts','posts' }}/tomcat_401.png"
         imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
-                                                                          src="/assets/{{ page.path | replace:'_posts','posts' }}/tomcat_401.png"
-                                                                          height="328" width="640"/></a></div>
+                  src="/assets/{{ page.path | replace:'_posts','posts' }}/tomcat_401.png"
+                /></a></div>
 <div style="text-align: justify;">
 </div>
 <div style="text-align: justify;">The usual workaround is to edit the default 401 error page to redirect the user to a
@@ -82,7 +82,7 @@ blogger_orig_url: http://david-codes.blogspot.com/2014/12/openam-and-kerberos-au
 <a
         href="/assets/{{ page.path | replace:'_posts','posts' }}/modules.png"
         imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0"
-                                                                          src="/assets/{{ page.path | replace:'_posts','posts' }}/modules.png">
+          src="/assets/{{ page.path | replace:'_posts','posts' }}/modules.png">
 
 Here is the code of a simple custom 401 error page :
 

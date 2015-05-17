@@ -4,7 +4,7 @@ title: New blog on Jekyll and Github pages
 author: David Hatanian
 ---
 
-I finally for tired of the Blogger's very slow and overcomplicated interface, so when I bought the `hatanian.com` domain name I decided to also migrate to something lighter.
+I finally got tired of Blogger's very slow and overcomplicated interface, so when I bought the `hatanian.com` domain name I decided to also migrate to something lighter.
 
 #Setting up
 

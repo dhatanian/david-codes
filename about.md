@@ -6,7 +6,7 @@ permalink: /about/
 
 <div style="float:left; margin-right:35px; max-width:502px; position:relative" markdown="1">
 
-I am a software engineer, working mainly on Java / AnjularJS applications at the moment. I also have a strong interest for Scala development.
+I am a software engineer, working mainly on Java / AngularJS applications at the moment. I also have a strong interest for Scala development.
 
 I am French but work remotely from various places. So far it included India, Vietnam, Morocco, Malaysia, Switzerland and Senegal. Remote does work and I'll be happy to share my experience and tips on remote work.
 

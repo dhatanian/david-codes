@@ -4,7 +4,7 @@ title: Using HTTP sessions with Google Cloud Endpoints
 author: David Hatanian
 ---
 
-I like how easy [Google Cloud Enpoints](https://cloud.google.com/appengine/docs/java/endpoints/) makes it to create a REST API on Google App Engine. Granted, there are other solutions in the Java world (I also used RestX and Spring) but I still like the simplicity of Google Cloud Endpoints.
+I like how easy [Google Cloud Endpoints](https://cloud.google.com/appengine/docs/java/endpoints/) makes it to create a REST API on Google App Engine. Granted, there are other solutions in the Java world (I also used RestX and Spring) but I still like the simplicity of Google Cloud Endpoints.
 
 However, one problem with Cloud Endpoints is the authentication : by default it only supports Google's OAuth2 authentication protocol. Because my application uses sessions for other purposes, I wanted to authenticate the user based on his session. Endpoints authentication is actually extensible through an almost undocumented class called [Authenticator](https://cloud.google.com/appengine/docs/java/endpoints/javadoc/com/google/api/server/spi/config/Authenticator).
 

@@ -91,6 +91,15 @@ My recommendations :
   />
 </a>
 
+##Is that all ?##
+
+Not really, [Noah Sussman](http://noahsussman.com/), who is a tester at Etsy, listed all the things programmers believe about dates and that turn out to be wrong in two posts :
+
+ * [Falsehoods programmers believe about time](http://infiniteundo.com/post/25326999628/falsehoods-programmers-believe-about-time)
+ * [More falsehoods programmers believe about time; “wisdom of the crowd” edition](http://infiniteundo.com/post/25509354022/more-falsehoods-programmers-believe-about-time)
+
+ (If you want to know more about falsehoods, check out [this post]({% post_url 2015-07-30-falsehood-articles-everything-you-ve-been-told-is-a-lie- %}) where I list other similar blog articles)
+
 ##Who will save us ?##
 
 In Java, the `java.util.Date` and `java.util.Calendar` APIs are good enough for most simple

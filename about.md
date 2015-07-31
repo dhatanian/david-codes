@@ -1,6 +1,7 @@
 ---
 layout: page
 title: About me
+description: About David Hatanian, the author of this blog
 permalink: /about/
 ---
 

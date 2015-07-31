@@ -11,6 +11,15 @@
     {{ content }}
   </article>
 
+  <div id="post-nav" class="clearfix">
+    {% if page.previous.url %}
+      <a href="{{page.previous.url}}">&laquo; {{page.previous.title}}</a>
+    {% endif %}
+    {% if page.next.url %}
+      <a style="float:right;" href="{{page.next.url}}">{{page.next.title}} &raquo;</a>
+    {% endif %}
+  </div>
+
   <div id="disqus_thread"></div>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */

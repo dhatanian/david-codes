@@ -9,7 +9,7 @@ permalink: /about/
 
 I am a software engineer, working mainly on Java / AngularJS applications at the moment. I also have a strong interest for Scala development.
 
-I am French but work remotely from various places. So far it included India, Vietnam, Morocco, Malaysia, Switzerland and Senegal. Remote does work and I'll be happy to share my experience and tips on remote work.
+I am French but work remotely from various places. So far it included Spain, India, Vietnam, Morocco, Malaysia, Switzerland, Senegal and United Kingdom. I find remote work to be a great experience when organized well and I'll be happy to share my experience about it.
 
 </div>
 

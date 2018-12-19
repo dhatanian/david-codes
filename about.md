@@ -5,21 +5,22 @@ description: About David Hatanian, the author of this blog
 permalink: /about/
 ---
 
-<div style="float:left; margin-right:35px; max-width:502px; position:relative" markdown="1">
+<div style="float:left; margin-right:35px; max-width:500px; position:relative" markdown="1">
 
-I am a software engineer, working mainly on Java / AngularJS applications at the moment. I also have a strong interest for Scala development.
+I am a software engineer, working mainly on distributed systems at the moment. I mainly work in Java and I also have a strong interest for Scala development.
 
 I am French but work remotely from various places. So far it included Spain, India, Vietnam, Morocco, Malaysia, Switzerland, Senegal and United Kingdom. I find remote work to be a great experience when organized well and I'll be happy to share my experience about it.
 
 </div>
 
-<div style="float:left; position:relative" markdown="1">
+<div style="float:left; position:relative; width: 200px;" markdown="1">
 ![My picture](/portrait-small.jpg){:height="200px"}
 </div>
 
+<div style="float:left; position:relative; width: 100%;" markdown="1">
 To contact me or know more :
 
-<a href='https://vn.linkedin.com/pub/david-hatanian/13/16/3b6' target='_blank' >
+<a href='https://www.linkedin.com/in/davidhatanian/' target='_blank' >
 ![LinkedIn logo](/icons/linkedin.png){:height="30px"} LinkedIn</a>
 
 <a href='https://twitter.com/DHatanian' target='_blank' >
@@ -37,3 +38,4 @@ To contact me or know more :
 <sub><sup>
 Icons by <a href='http://goodstuffnononsense.com'>goodstuffnononsense.com</a></sup>
 </sub>
+</div>

@@ -102,7 +102,7 @@ Not really, [Noah Sussman](http://noahsussman.com/), who is a tester at Etsy, li
 
  (If you want to know more about falsehoods, check out [this post]({% post_url 2015-07-30-falsehood-articles-everything-you-ve-been-told-is-a-lie- %}) where I list other similar blog articles)
 
-##Who will save us ?##
+## Who will save us ?
 
 In Java, the `java.util.Date` and `java.util.Calendar` APIs are good enough for most simple
     use cases. The [Joda time library](http://www.joda.org/joda-time) gives easiest access to most date and

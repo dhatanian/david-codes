@@ -17,7 +17,8 @@ Microsoft's Azure platform experienced an [outage last year](http://azure.micros
 
 This articles is an attempt to list the gotchas you will encounter working with dates. There are two type of tricky aspects in handling dates : the date system itself, with its timezone, leap years and daylight saving time; and the technical aspect, that is how our computer systems manage dates.
 
-##Timezones and daylight saving time##
+## Timezones and daylight saving time
+
 Aaah timezones... certainly easy to compute, right ? Just a signed `int` to indicate how many hours from UTC to store in the database.
 
 But wait, did you know that some timezones have 30 minutes offset as well ? Check out Tehran (UTC+4:30) or New Delhi (UTC+5:30).
@@ -31,7 +32,8 @@ Another interesting consequence of daylight saving time : in a given timezone, t
 > In most of Europe, when the clocks are set from daylight saving time to standard time, at 3 AM the clocks are set back to 2 AM. Thus, a time like 2:29 happens twice in that night. In spring, the clocks go from 1:59 to 3 AM straight. Thus, 2:29 does not happen at all.
 
 
-##Leap years##
+## Leap years
+
 Enough about country-specific aspects, what about universal aspects of our calendar, such as leap years ? In those years, the year counts 366 days instead of the usual 365. Here's how to know if you're in a leap year [according to Wikipedia](http://en.wikipedia.org/wiki/Leap_year#Algorithm) :
 
 {% highlight bash %}
@@ -47,7 +49,7 @@ If Microsoft made the mistake, we can expect others to do it as well.
 
 Now, let us say you have circumvented the problem by using a reliable date library (more on that later) and good unit testing. You're not done yet because our computer systems make date management even trickier...
 
-##Trusting the user's clock##
+## Trusting the user's clock
 If you're developing a rich web application, a mobile application or an old school desktop application, you will have to deal with the user's clock.
 
 That clock can be improperly set, and your time-sensitive operations might fail
@@ -64,7 +66,7 @@ One very time-sensitive type of operations is authentication. A lot of
 
 Even is the user's clock is correctly set, you know have two clocks in play at least (the client and the server), which are possibly in different timezones. When you pass dates from one system to another (for example with AJAX calls), make sure to pass them in a timezone-insensitive way and then to translate in the server's timezone during deserialization, otherwise you will have surprises.
 
-##Parsing and printing dates##
+## Parsing and printing dates
 
 Did you write any application that does not either parse a date or prints somewhere (screen, name of a file, a web-service) ?
 
@@ -91,7 +93,7 @@ My recommendations :
   />
 </a>
 
-##Is that all ?##
+## Is that all ?
 
 Not really, [Noah Sussman](http://noahsussman.com/), who is a tester at Etsy, listed all the things programmers believe about dates and that turn out to be wrong in two posts :
 

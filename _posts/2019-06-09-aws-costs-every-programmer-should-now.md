@@ -61,3 +61,20 @@ I used the same approach to extract the median price of 1GB of RAM on EC2. Elast
 |Hard Disk| 0.05 $/month |
 |S3| 0.02 $/month |
 |S3 Glacier| 0.004 $/month |
+
+While this is the pure storage cost, you also need to look at the usage patterns for your data. How much CPU will you need to run that in-memory database 24/7?
+
+Same for S3: how much will you pay in writing/reading requests? I've seen workloads where the storage cost on S3 was negligible but the cost of writing a lot of objects in S3 made the team write their own filesystem on top of S3.
+
+# Bandwidth #
+
+A few [comments on HackerNews](https://news.ycombinator.com/item?id=20138409) pointed out that I left the bandwidth costs out. Indeed if you are serving data to end users, or need cross-region replication, you need to look into those costs as well.
+
+|Type of data transfer|Cost of transferring 1GB|
+|---|---|
+|EU/US region to any other region | 0.02 $/GB |
+|APAC region to any other region | 0.09 $/GB |
+|EU/US region to Internet | 0.05 $/GB |
+|APAC region to Internet | 0.08 $/GB |
+|Between two AZs in the same region| 0.01 $/GB |
+|Inside the same AZ| Free |

@@ -6,7 +6,7 @@ author: David Hatanian
 
 I finally got tired of Blogger's very slow and overcomplicated interface, so when I bought the `hatanian.com` domain name I decided to also migrate to something lighter.
 
-#Setting up
+# Setting up
 
 I wanted something that would accept markdown, display code nicely, accept git versioning. [Jekyll](http://jekyllrb.com) was a great fit, and since it works well on Github Pages, well I got hosting for free !
 
@@ -18,7 +18,7 @@ Luckily Cloudflare has a [free plan](https://www.cloudflare.com/plans) that incl
 
 It felt a bit strange to simply give Cloudflare access to my DNS settings on Godaddy and see that they were able to generate a certificate for my domain. Then again it's logical : a lot of certificate authorities check the domain ownership through the DNS entries.
 
-#First tweaks
+# First tweaks
 
 Anyway I now had a fresh new blog that I needed to fill in. I fixed up the default theme a little bit by jutifying the text by default and moving the navigation bar to the left of the screen.
 
@@ -26,7 +26,7 @@ Jekyll's default `index.html` is the list of blog posts. I don't think that's a 
 
 <script src="https://gist.github.com/nimbupani/1421828.js"></script>
 
-#Migrating Blogger's content
+# Migrating Blogger's content
 
 This was quite a piece of cake. Blogger allows you to export a XML file that contains all your blog posts and the associated comments (we'll talk about comments later).
 
@@ -36,7 +36,7 @@ The `<img>` tags where still linking to Blogger though, so I downloaded them man
 
 For some reason, Blogger set fixed `width` and `height` attributes for the images. This resulting in weird-looking image that were shrinked when viewed on small screens. Removing the `width` and `height` attributes from the `<img>` tags fixed the issue.
 
-#Setting up a workflow
+# Setting up a workflow
 
 When I started working with images, I was faced with a problem : where do I put images associated with a given blog post ? I would prefer to store them next to the post, so I started creating dedicated folders for each post, with each time the html/md file along with the associated images. But Jekyll started to complain :
 
@@ -103,7 +103,7 @@ Finally, I wrote a quick shell script to create an article and the associated as
 
 	atom $post_file
 
-#Adding comments
+# Adding comments
 Adding comments is absolutely trivial with [Disqus](https://disqus.com). This free service generates by default a comment thread per URL of your blog. You just have to insert some HTML and Javascript at the end of your page.
 
 Because my posts can have several URLs (the latest post is also the root of the site), I slightly modified the Disqus initialization code to include a custom identifier, which is the post id extracted by a Liquide tag :
@@ -135,7 +135,7 @@ The first import went well, but because the URLs had changed from Blogger to Git
 
 After that, I had a nice commenting interface, with my old comments loaded !
 
-#Redirecting from Blogger to Github Pages
+# Redirecting from Blogger to Github Pages
 
 [This post by Suriya Prakash](http://blogtimenow.com/blogging/automatically-redirect-blogger-blog-another-blog-website/) explains well how to setup a redirection from Blogger.
 
@@ -199,6 +199,6 @@ This was not on all posts. Because I mainly blogged from Vietnam and India, I gu
 	blogger_orig_url: http://david-codes.blogspot.com/2014/05/cloud-platform-orchestrator-app.html
 	---
 
-#Conclusion#
+# Conclusion#
 
 That's all what is needed to move to Jekyll on Github pages ! The process was quite smooth, now I need to tweak a bit this default theme :-)
